@@ -8760,6 +8760,56 @@ func Test_Download_pulumi(t *testing.T) {
 	}
 }
 
+func Test_Download_kluctl(t *testing.T) {
+	tools := MakeTools()
+	name := "kluctl"
+	const toolVersion = "v2.26.0"
+
+	tool := getTool(name, tools)
+
+	tests := []test{
+		{
+			os:      "darwin",
+			arch:    arch64bit,
+			version: toolVersion,
+			url:     "https://github.com/kluctl/kluctl/releases/download/v2.26.0/kluctl_v2.26.0_darwin_amd64.tar.gz",
+		},
+		{
+			os:      "darwin",
+			arch:    archDarwinARM64,
+			version: toolVersion,
+			url:     "https://github.com/kluctl/kluctl/releases/download/v2.26.0/kluctl_v2.26.0_darwin_arm64.tar.gz",
+		},
+		{
+			os:      "linux",
+			arch:    arch64bit,
+			version: toolVersion,
+			url:     "https://github.com/kluctl/kluctl/releases/download/v2.26.0/kluctl_v2.26.0_linux_amd64.tar.gz",
+		},
+		{
+			os:      "linux",
+			arch:    archARM64,
+			version: toolVersion,
+			url:     "https://github.com/kluctl/kluctl/releases/download/v2.26.0/kluctl_v2.26.0_linux_arm64.tar.gz",
+		},
+		{
+			os:      "ming",
+			arch:    arch64bit,
+			version: toolVersion,
+			url:     "https://github.com/kluctl/kluctl/releases/download/v2.26.0/kluctl_v2.26.0_windows_amd64.zip",
+		},
+	}
+	for _, tc := range tests {
+		got, err := tool.GetURL(tc.os, tc.arch, tc.version, false)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got != tc.url {
+			t.Fatalf("\nwant: %s\ngot:  %s", tc.url, got)
+		}
+	}
+}
+
 func Test_DownloadOpencode(t *testing.T) {
 	tools := MakeTools()
 	name := "opencode"
